@@ -7,7 +7,7 @@ class rsa():
 		self.public_key = None
 		self.private_key = None
 
-	def key_pair_generates(self):
+	def generate_key_pair(self):
 		key = RSA.generate(2048)
 
 		# Private key is being generated
