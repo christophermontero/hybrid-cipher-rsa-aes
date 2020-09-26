@@ -22,11 +22,8 @@ class rsa():
 
 		return self.private_key, self.public_key
 
-	def encrypt_key(self):
+	def encrypt_key(self, session_key):
 		recipent_key = RSA.import_key(open("public.pem").read())
-		session_key = get_random_bytes(16) # Random user's key 128 bits
-
-		print(session_key)
 
 		# Encrypt the session key with the public RSA key
 		cipher_rsa = PKCS1_OAEP.new(recipent_key)
@@ -41,10 +38,21 @@ class rsa():
 
 		return key_decrypted
 
+class aes(object):
+	def __init__(self, arg):
+		self.session_key = None
+		self.session_key_cipher = None
+		self.iv = None
+		self.iv_cipher = None
+		
+
 rsa = rsa()
 keys_gen = rsa.generate_key_pair()
 
-encrypt = rsa.encrypt_key()
+session_key = get_random_bytes(16) # Random user's key 128 bits
+print(session_key)
+
+encrypt = rsa.encrypt_key(session_key)
 decrypt = rsa.decrypt_key(encrypt)
 
 print("Encrypt " + str(encrypt))
