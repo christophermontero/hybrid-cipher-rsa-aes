@@ -26,12 +26,26 @@ class rsa():
 		recipent_key = RSA.import_key(open("public.pem").read())
 		session_key = get_random_bytes(16) # Random user's key 128 bits
 
+		print(session_key)
+
 		# Encrypt the session key with the public RSA key
 		cipher_rsa = PKCS1_OAEP.new(recipent_key)
 		key_encrypted = cipher_rsa.encrypt(session_key)
 
 		return key_encrypted
 
-keys = rsa()
-keys_gen = keys.key_pair_generates()
-print(keys.encrypt_key())
+	def decrypt_key(self, key_encrypted):
+		recipent_key = RSA.import_key(open("private.pem").read())
+		cipher_rsa = PKCS1_OAEP.new(recipent_key)
+		key_decrypted = cipher_rsa.decrypt(key_encrypted)
+
+		return key_decrypted
+
+rsa = rsa()
+keys_gen = rsa.generate_key_pair()
+
+encrypt = rsa.encrypt_key()
+decrypt = rsa.decrypt_key(encrypt)
+
+print("Encrypt " + str(encrypt))
+print("Decrypt " + str(decrypt))
