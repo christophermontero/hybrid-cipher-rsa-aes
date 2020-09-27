@@ -2,6 +2,7 @@ from Crypto.Random import get_random_bytes
 import argparse
 
 import algorithms as alg # Import all the algorithms to this file
+import util
 
 def _main(file_name):
 	
@@ -10,12 +11,9 @@ def _main(file_name):
 	keys_gen = rsa.generate_key_pair()
 	session_key = get_random_bytes(16) # Random user's key 128 bits
 
-	file_utf8 = open(file_name,"r",encoding='utf-8')
-	text = file_utf8.read()
-	file_utf8.close()
-
-	# The file is being converted to bytes
-	text_to_bytes = str.encode(text)
+	# Convert file from utf-8 to bytes
+	convert = util.convert(file_name)
+	text_to_bytes = convert.to_bytes()
 
 	# Encrypt and decrypt the session key
 	key_encrypted = rsa.encrypt_key(session_key)
