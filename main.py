@@ -4,7 +4,7 @@ import argparse
 import algorithms as alg # Import all the algorithms to this file
 import util
 
-def _main(file_name):
+def main(file_name):
 	
 	# Instance the rsa class
 	rsa = alg.rsa()
@@ -27,13 +27,19 @@ def _main(file_name):
 	# Decrypt the message into the file
 	decrypt_message = aes.decrypt_message(iv)
 	
-	return decrypt_message
+	return encrypt_message, decrypt_message
 
 if __name__ == '__main__':
-	parser = argparse.ArgumentParser(description='Cipher and decipher texts inputs using hybrid cipher')
+	parser = argparse.ArgumentParser(description='Cipher and decipher text files using hybrid cipher')
 
 	# Declare arguments to pass from console
 	parser.add_argument('file', help='Insert the name of file as input')
+	parser.add_argument('-e', "--encrypt", action="store_true", help='Use to encrypt the input file')
+	parser.add_argument('-d', "--decrypt", action="store_true", help='Use to decrypt the message')
 
 	args = parser.parse_args()
-	print(_main(args.file))
+
+	if args.encrypt:
+		print("Encrypted message: " + str(main(args.file)[0]))
+	else:
+		print("Decrypted message: " + str(main(args.file)[1]))
