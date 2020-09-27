@@ -1,5 +1,4 @@
 from Crypto.PublicKey import RSA
-from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
 from Crypto.Util.Padding import pad, unpad
 
@@ -40,8 +39,8 @@ class rsa():
 		return key_decrypted
 
 class aes_cbc():
-	def __init__(self, key_encrypted, text_bytes):
-		self.session_key = rsa.decrypt_key(key_encrypted)
+	def __init__(self, key_decrypted, text_bytes):
+		self.session_key = key_decrypted
 		self.text_bytes = text_bytes
 		self.ciphertext = None
 		self.iv = None
@@ -59,23 +58,3 @@ class aes_cbc():
 		self.text_decrypted_utf8 = unpad(cipher_aes.decrypt(self.ciphertext), AES.block_size).decode('utf-8')
 
 		return self.text_decrypted_utf8
-
-rsa = rsa()
-keys_gen = rsa.generate_key_pair()
-
-session_key = get_random_bytes(16) # Random user's key 128 bits
-
-file_utf8 = open("message.txt","r",encoding='utf-8')
-text = file_utf8.read()
-file_utf8.close()
-
-# The file is being converted to bytes
-text_to_bytes = str.encode(text)
-
-key_encrypted = rsa.encrypt_key(session_key)
-
-aes = aes_cbc(key_encrypted,text_to_bytes)
-encrypt_message = aes.encrypt_message()
-iv = encrypt_message[1]
-decrypt_message = aes.decrypt_message(iv)
-print(decrypt_message)
