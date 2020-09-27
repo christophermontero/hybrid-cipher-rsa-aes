@@ -27,7 +27,7 @@ def main(file_name):
 	# Decrypt the message into the file
 	decrypt_message = aes.decrypt_message(iv)
 	
-	return encrypt_message, decrypt_message
+	return encrypt_message[0], decrypt_message
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Cipher and decipher text files using hybrid cipher')
